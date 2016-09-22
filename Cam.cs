@@ -14,8 +14,13 @@ public class Cam : MonoBehaviour {
 
 
 	// MODIFICAÇÃO
+	// Leia da ConfigUNITY.txt
+	// TODO: IDENTIFICAR SE O ConfigUNITY.TXT existe
 	void setFromConfig(){
+		print ("CAMERA - setFromConfig()");
 		string[] lines = System.IO.File.ReadAllLines (@"ConfigUNITY.txt");
+
+		// Perdendo precisão --> float recebe int
 		alturaCamera = Int32.Parse(lines [4]);
 		distanciaCamera = Int32.Parse(lines [5]);
 		anguloCamera = Int32.Parse(lines [6]);

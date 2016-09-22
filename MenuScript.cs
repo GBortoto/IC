@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class MenuScript : MonoBehaviour
 {
@@ -37,14 +38,38 @@ public class MenuScript : MonoBehaviour
 
 	// MODIFICAÇÂO
 	void startConfig(){
-		string[] lines = { "CONFIG FILE - DO NOT MODIFY", "ARQUIVO DE CONFIGURAÇÃO - NÃO MODIFICAR", "0", "0", "0", "0", "0" };
-		System.IO.File.WriteAllLines (@"ConfigUNITY.txt", lines);
+		try{
+			//print("teste1");
+			// O arquivo extiste? + Ele tem as linhas certas?
+			string[] linhas = readFromConfig();
+			//print("teste2");
+			int a;
+			for(int i=2; i<7; i++){
+				if(linhas[i] == "") {
+					throw new System.Exception();
+				}
+				Int32.Parse(linhas[i]);
+			}
+			//print("teste3");
+			if( (linhas[0] != "CONFIG FILE - DO NOT MODIFY") || (linhas[1] != "ARQUIVO DE CONFIGURAÇÃO - NÃO MODIFICAR")){
+				throw new System.Exception();
+			}
+			//print("passou");
+			return;
+			// Se tiver, não tem porque mexer nesse arquivo
+
+		} catch(Exception e){
+			// Exception = não satisfez os requisitos, pode criar um novo config
+			//print ("caiu no exc");
+			string[] lines = { "CONFIG FILE - DO NOT MODIFY", "ARQUIVO DE CONFIGURAÇÃO - NÃO MODIFICAR", "10", "0", "50", "10", "10" };
+			File.WriteAllLines (@"ConfigUNITY.txt", lines);
+		}
 	}
 
 	// MODIFICAÇÃO
 	void writeAllOnConfig(string text){
-		print ("CALLED");
-		print (text);
+		//print ("CALLED");
+		//print (text);
 		string[] lines = readFromConfig ();
 
 		if(text == "Desativado"){
@@ -72,12 +97,12 @@ public class MenuScript : MonoBehaviour
 			lines [5] = entradaDistancia.text;
 			lines [6] = entradaAngulo.text;
 		}
-		System.IO.File.WriteAllLines (@"ConfigUNITY.txt", lines);
+		File.WriteAllLines (@"ConfigUNITY.txt", lines);
 	}
 
 	// MODIFICAÇÃO
 	void setFromConfig(){
-		string[] lines = System.IO.File.ReadAllLines (@"ConfigUNITY.txt");
+		string[] lines = File.ReadAllLines (@"ConfigUNITY.txt");
 		/*
 		for (int i = 0; i < lines.Length; i++) {
 			print (lines [i]);
@@ -96,7 +121,7 @@ public class MenuScript : MonoBehaviour
 	}
 
 	string[] readFromConfig(){
-		string[] lines = System.IO.File.ReadAllLines (@"ConfigUNITY.txt");
+		string[] lines = File.ReadAllLines (@"ConfigUNITY.txt");
 		return lines;
 	}
 
@@ -164,7 +189,7 @@ public class MenuScript : MonoBehaviour
 		entradaAltura.enabled = true;
 		entradaAngulo.enabled = false;
 		entradaDistancia.enabled = false;
-		changedEstiloVisao ();
+		//changedEstiloVisao ();
 
 		// MODIFICAÇÃO
 		setFromConfig();
@@ -254,7 +279,7 @@ public class MenuScript : MonoBehaviour
 		else if(!entradaAltura.text.Equals("")) {
 			angulo = int.Parse (entradaAngulo.text);
 		}
-		vetorVelocidade.text = "";
+		//vetorVelocidade.text = "";
 		//Debug.Log(velocidade);
 
 	}
